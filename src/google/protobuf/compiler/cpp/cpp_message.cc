@@ -292,6 +292,7 @@ MessageGenerator::MessageGenerator(const Descriptor* descriptor,
                                    const Options& options)
   : descriptor_(descriptor),
     classname_(ClassName(descriptor, false)),
+    keyfield_(NULL),
     options_(options),
     field_generators_(descriptor, options),
     nested_generators_(new scoped_ptr<MessageGenerator>[
@@ -314,6 +315,18 @@ MessageGenerator::MessageGenerator(const Descriptor* descriptor,
   for (int i = 0; i < descriptor->extension_count(); i++) {
     extension_generators_[i].reset(
       new ExtensionGenerator(descriptor->extension(i), options));
+  }
+
+  for (int i = 0; i < descriptor_->field_count(); i++) {
+    const FieldDescriptor* field = descriptor_->field(i);
+    if (field->is_comparable()) {
+      if (keyfield_ == NULL) {
+        keyfield_ = field;
+      } else {
+        keyfield_ = NULL;
+        break;
+      }
+    }
   }
 }
 
@@ -528,15 +541,23 @@ GenerateClassDefinition(io::Printer* printer) {
     if (HasDescriptorMethods(descriptor_->file())) {
       printer->Print(vars,
         "void CopyFrom(const ::google::protobuf::Message& from);\n"
-        "void MergeFrom(const ::google::protobuf::Message& from);\n");
+        "void MergeFrom(const ::google::protobuf::Message& from);\n"
+        "int Compare(const ::google::protobuf::Message& other) const;\n");
     } else {
       printer->Print(vars,
-        "void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from);\n");
+        "void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from);\n"
+        "int CheckTypeAndCompare(const ::google::protobuf::MessageLite& other) const;\n");
     }
 
     printer->Print(vars,
       "void CopyFrom(const $classname$& from);\n"
       "void MergeFrom(const $classname$& from);\n"
+      "int Compare(const $classname$& other) const;\n");
+    if (keyfield_) {
+      field_generators_.get(keyfield_).GenerateKeyCompareDeclaration(printer);
+    }
+    printer->Print(vars,
+      "void SortFields();\n"
       "void Clear();\n"
       "bool IsInitialized() const;\n"
       "\n"
@@ -943,6 +964,12 @@ GenerateClassMethods(io::Printer* printer) {
     printer->Print("\n");
 
     GenerateIsInitialized(printer);
+    printer->Print("\n");
+
+    GenerateCompare(printer);
+    printer->Print("\n");
+
+    GenerateSortFields(printer);
     printer->Print("\n");
   }
 
@@ -1458,6 +1485,7 @@ GenerateMergeFromCodedStream(io::Printer* printer) {
       "classname", classname_);
 
     printer->Print(
+      "SortFields();\n"
       "}\n");
     return;
   }
@@ -1568,7 +1596,10 @@ GenerateMergeFromCodedStream(io::Printer* printer) {
         // Expect EOF.
         // TODO(kenton):  Expect group end-tag?
         printer->Print(
-          "if (input->ExpectAtEnd()) return true;\n");
+          "if (input->ExpectAtEnd()) {\n"
+          "  SortFields();\n"
+          "  return true;\n"
+          "}\n");
       }
 
       printer->Print(
@@ -1588,6 +1619,7 @@ GenerateMergeFromCodedStream(io::Printer* printer) {
   printer->Print(
     "if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==\n"
     "    ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {\n"
+    "  SortFields();\n"
     "  return true;\n"
     "}\n");
 
@@ -1661,6 +1693,7 @@ GenerateMergeFromCodedStream(io::Printer* printer) {
   printer->Outdent();
   printer->Print(
     "  }\n"                   // while
+    "  SortFields();\n"
     "  return true;\n"
     "#undef DO_\n"
     "}\n");
@@ -1668,6 +1701,9 @@ GenerateMergeFromCodedStream(io::Printer* printer) {
 
 void MessageGenerator::GenerateSerializeOneField(
     io::Printer* printer, const FieldDescriptor* field, bool to_array) {
+  if (field->options().omit())
+    return;
+
   PrintFieldComment(printer, field);
 
   if (!field->is_repeated()) {
@@ -1865,6 +1901,9 @@ GenerateByteSize(io::Printer* printer) {
   for (int i = 0; i < descriptor_->field_count(); i++) {
     const FieldDescriptor* field = descriptor_->field(i);
 
+    if (field->options().omit())
+      continue;
+
     if (!field->is_repeated()) {
       // See above in GenerateClear for an explanation of this.
       // TODO(kenton):  Share code?  Unclear how to do so without
@@ -2013,6 +2052,88 @@ GenerateIsInitialized(io::Printer* printer) {
     "}\n");
 }
 
+void MessageGenerator::
+GenerateCompare(io::Printer* printer) {
+  if (HasDescriptorMethods(descriptor_->file())) {
+    // Generate the generalized Compare (aka that which takes in the Message
+    // base class as a parameter).
+    printer->Print(
+      "int $classname$::Compare(const ::google::protobuf::Message& other) const {\n"
+      "  if (&other == this) return 0;\n",
+      "classname", classname_);
+    printer->Indent();
+
+    // Cast the message to the proper type. If we find that the message is
+    // *not* of the proper type, we can still call Compare via the reflection
+    // system, as the GOOGLE_CHECK above ensured that we have the same descriptor
+    // for each message.
+    printer->Print(
+      "const $classname$* source =\n"
+      "  ::google::protobuf::internal::dynamic_cast_if_available<const $classname$*>(\n"
+      "    &other);\n"
+      "if (source == NULL) {\n"
+      "  return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);\n"
+      "} else {\n"
+      "  return Compare(*source);\n"
+      "}\n",
+      "classname", classname_);
+
+    printer->Outdent();
+    printer->Print("}\n\n");
+  } else {
+    // Generate CheckTypeAndCompare().
+    printer->Print(
+      "int $classname$::CheckTypeAndCompare(\n"
+      "    const ::google::protobuf::MessageLite& other) const {\n"
+      "  return Compare(*::google::protobuf::down_cast<const $classname$*>(&other));\n"
+      "}\n"
+      "\n",
+      "classname", classname_);
+  }
+
+  // Generate the class-specific Compare, which avoids the GOOGLE_CHECK and cast.
+  printer->Print(
+    "int $classname$::Compare(const $classname$& other) const {\n"
+    "  if(&other == this) return 0;\n",
+    "classname", classname_);
+  printer->Indent();
+
+  for (int i = 0; i < descriptor_->field_count(); i++) {
+    const FieldDescriptor* field = descriptor_->field(i);
+    if (field->is_comparable()) {
+      field_generators_.get(field).GenerateCompareCode(printer);
+      }
+  }
+
+  printer->Outdent();
+  printer->Print(
+    "  return 0;\n"
+    "}\n");
+
+  if (keyfield_) {
+    // Generate the key Compare.
+    printer->Print("int $classname$::", "classname", classname_);
+    field_generators_.get(keyfield_).GenerateKeyCompareCode(printer);
+  }
+}
+
+void MessageGenerator::
+GenerateSortFields(io::Printer* printer) {
+  printer->Print(
+    "void $classname$::SortFields() {\n",
+    "classname", classname_);
+  printer->Indent();
+
+  for (int i = 0; i < descriptor_->field_count(); i++) {
+    const FieldDescriptor* field = descriptor_->field(i);
+    if (field->is_ordered()) {
+      printer->Print("$name$_.Sort();\n", "name", FieldName(field));
+      }
+  }
+
+  printer->Outdent();
+  printer->Print("}\n");
+}
 
 }  // namespace cpp
 }  // namespace compiler

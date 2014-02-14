@@ -308,13 +308,17 @@ void protobuf_AssignDesc_google_2fprotobuf_2fdescriptor_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(MessageOptions));
   FieldOptions_descriptor_ = file->message_type(10);
-  static const int FieldOptions_offsets_[7] = {
+  static const int FieldOptions_offsets_[11] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FieldOptions, ctype_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FieldOptions, packed_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FieldOptions, lazy_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FieldOptions, deprecated_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FieldOptions, experimental_map_key_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FieldOptions, weak_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FieldOptions, omit_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FieldOptions, comparable_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FieldOptions, ordered_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FieldOptions, enum_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FieldOptions, uninterpreted_option_),
   };
   FieldOptions_reflection_ =
@@ -638,38 +642,40 @@ void protobuf_AddDesc_google_2fprotobuf_2fdescriptor_2eproto() {
     "\037no_standard_descriptor_accessor\030\002 \001(\010:\005"
     "false\022C\n\024uninterpreted_option\030\347\007 \003(\0132$.g"
     "oogle.protobuf.UninterpretedOption*\t\010\350\007\020"
-    "\200\200\200\200\002\"\276\002\n\014FieldOptions\022:\n\005ctype\030\001 \001(\0162#."
+    "\200\200\200\200\002\"\231\003\n\014FieldOptions\022:\n\005ctype\030\001 \001(\0162#."
     "google.protobuf.FieldOptions.CType:\006STRI"
     "NG\022\016\n\006packed\030\002 \001(\010\022\023\n\004lazy\030\005 \001(\010:\005false\022"
     "\031\n\ndeprecated\030\003 \001(\010:\005false\022\034\n\024experiment"
-    "al_map_key\030\t \001(\t\022\023\n\004weak\030\n \001(\010:\005false\022C\n"
-    "\024uninterpreted_option\030\347\007 \003(\0132$.google.pr"
-    "otobuf.UninterpretedOption\"/\n\005CType\022\n\n\006S"
-    "TRING\020\000\022\010\n\004CORD\020\001\022\020\n\014STRING_PIECE\020\002*\t\010\350\007"
-    "\020\200\200\200\200\002\"x\n\013EnumOptions\022\031\n\013allow_alias\030\002 \001"
-    "(\010:\004true\022C\n\024uninterpreted_option\030\347\007 \003(\0132"
-    "$.google.protobuf.UninterpretedOption*\t\010"
-    "\350\007\020\200\200\200\200\002\"b\n\020EnumValueOptions\022C\n\024uninterp"
-    "reted_option\030\347\007 \003(\0132$.google.protobuf.Un"
-    "interpretedOption*\t\010\350\007\020\200\200\200\200\002\"`\n\016ServiceO"
-    "ptions\022C\n\024uninterpreted_option\030\347\007 \003(\0132$."
-    "google.protobuf.UninterpretedOption*\t\010\350\007"
-    "\020\200\200\200\200\002\"_\n\rMethodOptions\022C\n\024uninterpreted"
-    "_option\030\347\007 \003(\0132$.google.protobuf.Uninter"
-    "pretedOption*\t\010\350\007\020\200\200\200\200\002\"\236\002\n\023Uninterprete"
-    "dOption\022;\n\004name\030\002 \003(\0132-.google.protobuf."
-    "UninterpretedOption.NamePart\022\030\n\020identifi"
-    "er_value\030\003 \001(\t\022\032\n\022positive_int_value\030\004 \001"
-    "(\004\022\032\n\022negative_int_value\030\005 \001(\003\022\024\n\014double"
-    "_value\030\006 \001(\001\022\024\n\014string_value\030\007 \001(\014\022\027\n\017ag"
-    "gregate_value\030\010 \001(\t\0323\n\010NamePart\022\021\n\tname_"
-    "part\030\001 \002(\t\022\024\n\014is_extension\030\002 \002(\010\"\261\001\n\016Sou"
-    "rceCodeInfo\022:\n\010location\030\001 \003(\0132(.google.p"
-    "rotobuf.SourceCodeInfo.Location\032c\n\010Locat"
-    "ion\022\020\n\004path\030\001 \003(\005B\002\020\001\022\020\n\004span\030\002 \003(\005B\002\020\001\022"
-    "\030\n\020leading_comments\030\003 \001(\t\022\031\n\021trailing_co"
-    "mments\030\004 \001(\tB)\n\023com.google.protobufB\020Des"
-    "criptorProtosH\001", 4135);
+    "al_map_key\030\t \001(\t\022\023\n\004weak\030\n \001(\010:\005false\022\023\n"
+    "\004omit\030\013 \001(\010:\005false\022\031\n\ncomparable\030\014 \001(\010:\005"
+    "false\022\026\n\007ordered\030\r \001(\010:\005false\022\021\n\tenum_ty"
+    "pe\030\016 \001(\t\022C\n\024uninterpreted_option\030\347\007 \003(\0132"
+    "$.google.protobuf.UninterpretedOption\"/\n"
+    "\005CType\022\n\n\006STRING\020\000\022\010\n\004CORD\020\001\022\020\n\014STRING_P"
+    "IECE\020\002*\t\010\350\007\020\200\200\200\200\002\"x\n\013EnumOptions\022\031\n\013allo"
+    "w_alias\030\002 \001(\010:\004true\022C\n\024uninterpreted_opt"
+    "ion\030\347\007 \003(\0132$.google.protobuf.Uninterpret"
+    "edOption*\t\010\350\007\020\200\200\200\200\002\"b\n\020EnumValueOptions\022"
+    "C\n\024uninterpreted_option\030\347\007 \003(\0132$.google."
+    "protobuf.UninterpretedOption*\t\010\350\007\020\200\200\200\200\002\""
+    "`\n\016ServiceOptions\022C\n\024uninterpreted_optio"
+    "n\030\347\007 \003(\0132$.google.protobuf.Uninterpreted"
+    "Option*\t\010\350\007\020\200\200\200\200\002\"_\n\rMethodOptions\022C\n\024un"
+    "interpreted_option\030\347\007 \003(\0132$.google.proto"
+    "buf.UninterpretedOption*\t\010\350\007\020\200\200\200\200\002\"\236\002\n\023U"
+    "ninterpretedOption\022;\n\004name\030\002 \003(\0132-.googl"
+    "e.protobuf.UninterpretedOption.NamePart\022"
+    "\030\n\020identifier_value\030\003 \001(\t\022\032\n\022positive_in"
+    "t_value\030\004 \001(\004\022\032\n\022negative_int_value\030\005 \001("
+    "\003\022\024\n\014double_value\030\006 \001(\001\022\024\n\014string_value\030"
+    "\007 \001(\014\022\027\n\017aggregate_value\030\010 \001(\t\0323\n\010NamePa"
+    "rt\022\021\n\tname_part\030\001 \002(\t\022\024\n\014is_extension\030\002 "
+    "\002(\010\"\261\001\n\016SourceCodeInfo\022:\n\010location\030\001 \003(\013"
+    "2(.google.protobuf.SourceCodeInfo.Locati"
+    "on\032c\n\010Location\022\020\n\004path\030\001 \003(\005B\002\020\001\022\020\n\004span"
+    "\030\002 \003(\005B\002\020\001\022\030\n\020leading_comments\030\003 \001(\t\022\031\n\021"
+    "trailing_comments\030\004 \001(\tB)\n\023com.google.pr"
+    "otobufB\020DescriptorProtosH\001", 4226);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "google/protobuf/descriptor.proto", &protobuf_RegisterTypes);
   FileDescriptorSet::default_instance_ = new FileDescriptorSet();
@@ -800,7 +806,10 @@ bool FileDescriptorSet::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(10)) goto parse_file;
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -808,6 +817,7 @@ bool FileDescriptorSet::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         DO_(::google::protobuf::internal::WireFormat::SkipField(
@@ -816,6 +826,7 @@ bool FileDescriptorSet::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -908,6 +919,26 @@ bool FileDescriptorSet::IsInitialized() const {
     if (!this->file(i).IsInitialized()) return false;
   }
   return true;
+}
+
+int FileDescriptorSet::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const FileDescriptorSet* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const FileDescriptorSet*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int FileDescriptorSet::Compare(const FileDescriptorSet& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void FileDescriptorSet::SortFields() {
 }
 
 void FileDescriptorSet::Swap(FileDescriptorSet* other) {
@@ -1225,7 +1256,10 @@ bool FileDescriptorProto::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(88)) goto parse_weak_dependency;
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -1233,6 +1267,7 @@ bool FileDescriptorProto::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         DO_(::google::protobuf::internal::WireFormat::SkipField(
@@ -1241,6 +1276,7 @@ bool FileDescriptorProto::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -1597,6 +1633,26 @@ bool FileDescriptorProto::IsInitialized() const {
   return true;
 }
 
+int FileDescriptorProto::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const FileDescriptorProto* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const FileDescriptorProto*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int FileDescriptorProto::Compare(const FileDescriptorProto& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void FileDescriptorProto::SortFields() {
+}
+
 void FileDescriptorProto::Swap(FileDescriptorProto* other) {
   if (other != this) {
     std::swap(name_, other->name_);
@@ -1725,7 +1781,10 @@ bool DescriptorProto_ExtensionRange::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -1733,6 +1792,7 @@ bool DescriptorProto_ExtensionRange::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         DO_(::google::protobuf::internal::WireFormat::SkipField(
@@ -1741,6 +1801,7 @@ bool DescriptorProto_ExtensionRange::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -1852,6 +1913,26 @@ void DescriptorProto_ExtensionRange::CopyFrom(const DescriptorProto_ExtensionRan
 bool DescriptorProto_ExtensionRange::IsInitialized() const {
 
   return true;
+}
+
+int DescriptorProto_ExtensionRange::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const DescriptorProto_ExtensionRange* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const DescriptorProto_ExtensionRange*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int DescriptorProto_ExtensionRange::Compare(const DescriptorProto_ExtensionRange& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void DescriptorProto_ExtensionRange::SortFields() {
 }
 
 void DescriptorProto_ExtensionRange::Swap(DescriptorProto_ExtensionRange* other) {
@@ -2068,7 +2149,10 @@ bool DescriptorProto::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -2076,6 +2160,7 @@ bool DescriptorProto::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         DO_(::google::protobuf::internal::WireFormat::SkipField(
@@ -2084,6 +2169,7 @@ bool DescriptorProto::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -2332,6 +2418,26 @@ bool DescriptorProto::IsInitialized() const {
     if (!this->options().IsInitialized()) return false;
   }
   return true;
+}
+
+int DescriptorProto::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const DescriptorProto* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const DescriptorProto*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int DescriptorProto::Compare(const DescriptorProto& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void DescriptorProto::SortFields() {
 }
 
 void DescriptorProto::Swap(DescriptorProto* other) {
@@ -2692,7 +2798,10 @@ bool FieldDescriptorProto::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -2700,6 +2809,7 @@ bool FieldDescriptorProto::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         DO_(::google::protobuf::internal::WireFormat::SkipField(
@@ -2708,6 +2818,7 @@ bool FieldDescriptorProto::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -2985,6 +3096,26 @@ bool FieldDescriptorProto::IsInitialized() const {
   return true;
 }
 
+int FieldDescriptorProto::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const FieldDescriptorProto* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const FieldDescriptorProto*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int FieldDescriptorProto::Compare(const FieldDescriptorProto& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void FieldDescriptorProto::SortFields() {
+}
+
 void FieldDescriptorProto::Swap(FieldDescriptorProto* other) {
   if (other != this) {
     std::swap(name_, other->name_);
@@ -3137,7 +3268,10 @@ bool EnumDescriptorProto::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -3145,6 +3279,7 @@ bool EnumDescriptorProto::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         DO_(::google::protobuf::internal::WireFormat::SkipField(
@@ -3153,6 +3288,7 @@ bool EnumDescriptorProto::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -3306,6 +3442,26 @@ bool EnumDescriptorProto::IsInitialized() const {
   return true;
 }
 
+int EnumDescriptorProto::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const EnumDescriptorProto* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const EnumDescriptorProto*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int EnumDescriptorProto::Compare(const EnumDescriptorProto& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void EnumDescriptorProto::SortFields() {
+}
+
 void EnumDescriptorProto::Swap(EnumDescriptorProto* other) {
   if (other != this) {
     std::swap(name_, other->name_);
@@ -3455,7 +3611,10 @@ bool EnumValueDescriptorProto::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -3463,6 +3622,7 @@ bool EnumValueDescriptorProto::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         DO_(::google::protobuf::internal::WireFormat::SkipField(
@@ -3471,6 +3631,7 @@ bool EnumValueDescriptorProto::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -3617,6 +3778,26 @@ bool EnumValueDescriptorProto::IsInitialized() const {
     if (!this->options().IsInitialized()) return false;
   }
   return true;
+}
+
+int EnumValueDescriptorProto::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const EnumValueDescriptorProto* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const EnumValueDescriptorProto*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int EnumValueDescriptorProto::Compare(const EnumValueDescriptorProto& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void EnumValueDescriptorProto::SortFields() {
 }
 
 void EnumValueDescriptorProto::Swap(EnumValueDescriptorProto* other) {
@@ -3766,7 +3947,10 @@ bool ServiceDescriptorProto::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -3774,6 +3958,7 @@ bool ServiceDescriptorProto::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         DO_(::google::protobuf::internal::WireFormat::SkipField(
@@ -3782,6 +3967,7 @@ bool ServiceDescriptorProto::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -3933,6 +4119,26 @@ bool ServiceDescriptorProto::IsInitialized() const {
     if (!this->options().IsInitialized()) return false;
   }
   return true;
+}
+
+int ServiceDescriptorProto::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const ServiceDescriptorProto* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const ServiceDescriptorProto*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int ServiceDescriptorProto::Compare(const ServiceDescriptorProto& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void ServiceDescriptorProto::SortFields() {
 }
 
 void ServiceDescriptorProto::Swap(ServiceDescriptorProto* other) {
@@ -4119,7 +4325,10 @@ bool MethodDescriptorProto::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -4127,6 +4336,7 @@ bool MethodDescriptorProto::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         DO_(::google::protobuf::internal::WireFormat::SkipField(
@@ -4135,6 +4345,7 @@ bool MethodDescriptorProto::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -4319,6 +4530,26 @@ bool MethodDescriptorProto::IsInitialized() const {
     if (!this->options().IsInitialized()) return false;
   }
   return true;
+}
+
+int MethodDescriptorProto::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const MethodDescriptorProto* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const MethodDescriptorProto*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int MethodDescriptorProto::Compare(const MethodDescriptorProto& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void MethodDescriptorProto::SortFields() {
 }
 
 void MethodDescriptorProto::Swap(MethodDescriptorProto* other) {
@@ -4647,7 +4878,10 @@ bool FileOptions::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(7994)) goto parse_uninterpreted_option;
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -4655,6 +4889,7 @@ bool FileOptions::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         if ((8000u <= tag)) {
@@ -4668,6 +4903,7 @@ bool FileOptions::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -4980,6 +5216,26 @@ bool FileOptions::IsInitialized() const {
   if (!_extensions_.IsInitialized()) return false;  return true;
 }
 
+int FileOptions::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const FileOptions* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const FileOptions*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int FileOptions::Compare(const FileOptions& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void FileOptions::SortFields() {
+}
+
 void FileOptions::Swap(FileOptions* other) {
   if (other != this) {
     std::swap(java_package_, other->java_package_);
@@ -5126,7 +5382,10 @@ bool MessageOptions::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(7994)) goto parse_uninterpreted_option;
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -5134,6 +5393,7 @@ bool MessageOptions::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         if ((8000u <= tag)) {
@@ -5147,6 +5407,7 @@ bool MessageOptions::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -5293,6 +5554,26 @@ bool MessageOptions::IsInitialized() const {
   if (!_extensions_.IsInitialized()) return false;  return true;
 }
 
+int MessageOptions::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const MessageOptions* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const MessageOptions*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int MessageOptions::Compare(const MessageOptions& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void MessageOptions::SortFields() {
+}
+
 void MessageOptions::Swap(MessageOptions* other) {
   if (other != this) {
     std::swap(message_set_wire_format_, other->message_set_wire_format_);
@@ -5346,6 +5627,10 @@ const int FieldOptions::kLazyFieldNumber;
 const int FieldOptions::kDeprecatedFieldNumber;
 const int FieldOptions::kExperimentalMapKeyFieldNumber;
 const int FieldOptions::kWeakFieldNumber;
+const int FieldOptions::kOmitFieldNumber;
+const int FieldOptions::kComparableFieldNumber;
+const int FieldOptions::kOrderedFieldNumber;
+const int FieldOptions::kEnumTypeFieldNumber;
 const int FieldOptions::kUninterpretedOptionFieldNumber;
 #endif  // !_MSC_VER
 
@@ -5371,6 +5656,10 @@ void FieldOptions::SharedCtor() {
   deprecated_ = false;
   experimental_map_key_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyString());
   weak_ = false;
+  omit_ = false;
+  comparable_ = false;
+  ordered_ = false;
+  enum_type_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyString());
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -5381,6 +5670,9 @@ FieldOptions::~FieldOptions() {
 void FieldOptions::SharedDtor() {
   if (experimental_map_key_ != &::google::protobuf::internal::GetEmptyString()) {
     delete experimental_map_key_;
+  }
+  if (enum_type_ != &::google::protobuf::internal::GetEmptyString()) {
+    delete enum_type_;
   }
   if (this != default_instance_) {
   }
@@ -5420,6 +5712,16 @@ void FieldOptions::Clear() {
       }
     }
     weak_ = false;
+    omit_ = false;
+    comparable_ = false;
+  }
+  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    ordered_ = false;
+    if (has_enum_type()) {
+      if (enum_type_ != &::google::protobuf::internal::GetEmptyString()) {
+        enum_type_->clear();
+      }
+    }
   }
   uninterpreted_option_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -5529,6 +5831,71 @@ bool FieldOptions::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(88)) goto parse_omit;
+        break;
+      }
+
+      // optional bool omit = 11 [default = false];
+      case 11: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_omit:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &omit_)));
+          set_has_omit();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(96)) goto parse_comparable;
+        break;
+      }
+
+      // optional bool comparable = 12 [default = false];
+      case 12: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_comparable:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &comparable_)));
+          set_has_comparable();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(104)) goto parse_ordered;
+        break;
+      }
+
+      // optional bool ordered = 13 [default = false];
+      case 13: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_ordered:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &ordered_)));
+          set_has_ordered();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(114)) goto parse_enum_type;
+        break;
+      }
+
+      // optional string enum_type = 14;
+      case 14: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_enum_type:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_enum_type()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->enum_type().data(), this->enum_type().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectTag(7994)) goto parse_uninterpreted_option;
         break;
       }
@@ -5544,7 +5911,10 @@ bool FieldOptions::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(7994)) goto parse_uninterpreted_option;
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -5552,6 +5922,7 @@ bool FieldOptions::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         if ((8000u <= tag)) {
@@ -5565,6 +5936,7 @@ bool FieldOptions::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -5604,6 +5976,30 @@ void FieldOptions::SerializeWithCachedSizes(
   // optional bool weak = 10 [default = false];
   if (has_weak()) {
     ::google::protobuf::internal::WireFormatLite::WriteBool(10, this->weak(), output);
+  }
+
+  // optional bool omit = 11 [default = false];
+  if (has_omit()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(11, this->omit(), output);
+  }
+
+  // optional bool comparable = 12 [default = false];
+  if (has_comparable()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(12, this->comparable(), output);
+  }
+
+  // optional bool ordered = 13 [default = false];
+  if (has_ordered()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(13, this->ordered(), output);
+  }
+
+  // optional string enum_type = 14;
+  if (has_enum_type()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->enum_type().data(), this->enum_type().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      14, this->enum_type(), output);
   }
 
   // repeated .google.protobuf.UninterpretedOption uninterpreted_option = 999;
@@ -5660,6 +6056,31 @@ void FieldOptions::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(10, this->weak(), target);
   }
 
+  // optional bool omit = 11 [default = false];
+  if (has_omit()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(11, this->omit(), target);
+  }
+
+  // optional bool comparable = 12 [default = false];
+  if (has_comparable()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(12, this->comparable(), target);
+  }
+
+  // optional bool ordered = 13 [default = false];
+  if (has_ordered()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(13, this->ordered(), target);
+  }
+
+  // optional string enum_type = 14;
+  if (has_enum_type()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->enum_type().data(), this->enum_type().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        14, this->enum_type(), target);
+  }
+
   // repeated .google.protobuf.UninterpretedOption uninterpreted_option = 999;
   for (int i = 0; i < this->uninterpreted_option_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
@@ -5713,6 +6134,30 @@ int FieldOptions::ByteSize() const {
     // optional bool weak = 10 [default = false];
     if (has_weak()) {
       total_size += 1 + 1;
+    }
+
+    // optional bool omit = 11 [default = false];
+    if (has_omit()) {
+      total_size += 1 + 1;
+    }
+
+    // optional bool comparable = 12 [default = false];
+    if (has_comparable()) {
+      total_size += 1 + 1;
+    }
+
+  }
+  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    // optional bool ordered = 13 [default = false];
+    if (has_ordered()) {
+      total_size += 1 + 1;
+    }
+
+    // optional string enum_type = 14;
+    if (has_enum_type()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->enum_type());
     }
 
   }
@@ -5771,6 +6216,20 @@ void FieldOptions::MergeFrom(const FieldOptions& from) {
     if (from.has_weak()) {
       set_weak(from.weak());
     }
+    if (from.has_omit()) {
+      set_omit(from.omit());
+    }
+    if (from.has_comparable()) {
+      set_comparable(from.comparable());
+    }
+  }
+  if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    if (from.has_ordered()) {
+      set_ordered(from.ordered());
+    }
+    if (from.has_enum_type()) {
+      set_enum_type(from.enum_type());
+    }
   }
   _extensions_.MergeFrom(from._extensions_);
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -5797,6 +6256,26 @@ bool FieldOptions::IsInitialized() const {
   if (!_extensions_.IsInitialized()) return false;  return true;
 }
 
+int FieldOptions::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const FieldOptions* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const FieldOptions*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int FieldOptions::Compare(const FieldOptions& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void FieldOptions::SortFields() {
+}
+
 void FieldOptions::Swap(FieldOptions* other) {
   if (other != this) {
     std::swap(ctype_, other->ctype_);
@@ -5805,6 +6284,10 @@ void FieldOptions::Swap(FieldOptions* other) {
     std::swap(deprecated_, other->deprecated_);
     std::swap(experimental_map_key_, other->experimental_map_key_);
     std::swap(weak_, other->weak_);
+    std::swap(omit_, other->omit_);
+    std::swap(comparable_, other->comparable_);
+    std::swap(ordered_, other->ordered_);
+    std::swap(enum_type_, other->enum_type_);
     uninterpreted_option_.Swap(&other->uninterpreted_option_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
@@ -5921,7 +6404,10 @@ bool EnumOptions::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(7994)) goto parse_uninterpreted_option;
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -5929,6 +6415,7 @@ bool EnumOptions::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         if ((8000u <= tag)) {
@@ -5942,6 +6429,7 @@ bool EnumOptions::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -6070,6 +6558,26 @@ bool EnumOptions::IsInitialized() const {
   if (!_extensions_.IsInitialized()) return false;  return true;
 }
 
+int EnumOptions::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const EnumOptions* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const EnumOptions*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int EnumOptions::Compare(const EnumOptions& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void EnumOptions::SortFields() {
+}
+
 void EnumOptions::Swap(EnumOptions* other) {
   if (other != this) {
     std::swap(allow_alias_, other->allow_alias_);
@@ -6169,7 +6677,10 @@ bool EnumValueOptions::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(7994)) goto parse_uninterpreted_option;
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -6177,6 +6688,7 @@ bool EnumValueOptions::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         if ((8000u <= tag)) {
@@ -6190,6 +6702,7 @@ bool EnumValueOptions::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -6296,6 +6809,26 @@ bool EnumValueOptions::IsInitialized() const {
   if (!_extensions_.IsInitialized()) return false;  return true;
 }
 
+int EnumValueOptions::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const EnumValueOptions* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const EnumValueOptions*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int EnumValueOptions::Compare(const EnumValueOptions& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void EnumValueOptions::SortFields() {
+}
+
 void EnumValueOptions::Swap(EnumValueOptions* other) {
   if (other != this) {
     uninterpreted_option_.Swap(&other->uninterpreted_option_);
@@ -6394,7 +6927,10 @@ bool ServiceOptions::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(7994)) goto parse_uninterpreted_option;
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -6402,6 +6938,7 @@ bool ServiceOptions::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         if ((8000u <= tag)) {
@@ -6415,6 +6952,7 @@ bool ServiceOptions::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -6521,6 +7059,26 @@ bool ServiceOptions::IsInitialized() const {
   if (!_extensions_.IsInitialized()) return false;  return true;
 }
 
+int ServiceOptions::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const ServiceOptions* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const ServiceOptions*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int ServiceOptions::Compare(const ServiceOptions& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void ServiceOptions::SortFields() {
+}
+
 void ServiceOptions::Swap(ServiceOptions* other) {
   if (other != this) {
     uninterpreted_option_.Swap(&other->uninterpreted_option_);
@@ -6619,7 +7177,10 @@ bool MethodOptions::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(7994)) goto parse_uninterpreted_option;
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -6627,6 +7188,7 @@ bool MethodOptions::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         if ((8000u <= tag)) {
@@ -6640,6 +7202,7 @@ bool MethodOptions::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -6744,6 +7307,26 @@ bool MethodOptions::IsInitialized() const {
   }
 
   if (!_extensions_.IsInitialized()) return false;  return true;
+}
+
+int MethodOptions::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const MethodOptions* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const MethodOptions*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int MethodOptions::Compare(const MethodOptions& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void MethodOptions::SortFields() {
 }
 
 void MethodOptions::Swap(MethodOptions* other) {
@@ -6873,7 +7456,10 @@ bool UninterpretedOption_NamePart::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -6881,6 +7467,7 @@ bool UninterpretedOption_NamePart::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         DO_(::google::protobuf::internal::WireFormat::SkipField(
@@ -6889,6 +7476,7 @@ bool UninterpretedOption_NamePart::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -7008,6 +7596,26 @@ bool UninterpretedOption_NamePart::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
 
   return true;
+}
+
+int UninterpretedOption_NamePart::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const UninterpretedOption_NamePart* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const UninterpretedOption_NamePart*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int UninterpretedOption_NamePart::Compare(const UninterpretedOption_NamePart& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void UninterpretedOption_NamePart::SortFields() {
 }
 
 void UninterpretedOption_NamePart::Swap(UninterpretedOption_NamePart* other) {
@@ -7244,7 +7852,10 @@ bool UninterpretedOption::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -7252,6 +7863,7 @@ bool UninterpretedOption::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         DO_(::google::protobuf::internal::WireFormat::SkipField(
@@ -7260,6 +7872,7 @@ bool UninterpretedOption::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -7497,6 +8110,26 @@ bool UninterpretedOption::IsInitialized() const {
   return true;
 }
 
+int UninterpretedOption::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const UninterpretedOption* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const UninterpretedOption*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int UninterpretedOption::Compare(const UninterpretedOption& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void UninterpretedOption::SortFields() {
+}
+
 void UninterpretedOption::Swap(UninterpretedOption* other) {
   if (other != this) {
     name_.Swap(&other->name_);
@@ -7683,7 +8316,10 @@ bool SourceCodeInfo_Location::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -7691,6 +8327,7 @@ bool SourceCodeInfo_Location::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         DO_(::google::protobuf::internal::WireFormat::SkipField(
@@ -7699,6 +8336,7 @@ bool SourceCodeInfo_Location::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -7914,6 +8552,26 @@ bool SourceCodeInfo_Location::IsInitialized() const {
   return true;
 }
 
+int SourceCodeInfo_Location::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const SourceCodeInfo_Location* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const SourceCodeInfo_Location*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int SourceCodeInfo_Location::Compare(const SourceCodeInfo_Location& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void SourceCodeInfo_Location::SortFields() {
+}
+
 void SourceCodeInfo_Location::Swap(SourceCodeInfo_Location* other) {
   if (other != this) {
     path_.Swap(&other->path_);
@@ -8013,7 +8671,10 @@ bool SourceCodeInfo::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(10)) goto parse_location;
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -8021,6 +8682,7 @@ bool SourceCodeInfo::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         DO_(::google::protobuf::internal::WireFormat::SkipField(
@@ -8029,6 +8691,7 @@ bool SourceCodeInfo::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -8118,6 +8781,26 @@ void SourceCodeInfo::CopyFrom(const SourceCodeInfo& from) {
 bool SourceCodeInfo::IsInitialized() const {
 
   return true;
+}
+
+int SourceCodeInfo::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const SourceCodeInfo* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const SourceCodeInfo*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int SourceCodeInfo::Compare(const SourceCodeInfo& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void SourceCodeInfo::SortFields() {
 }
 
 void SourceCodeInfo::Swap(SourceCodeInfo* other) {

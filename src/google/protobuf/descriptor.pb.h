@@ -183,8 +183,11 @@ class LIBPROTOBUF_EXPORT FileDescriptorSet : public ::google::protobuf::Message 
   FileDescriptorSet* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const FileDescriptorSet& from);
   void MergeFrom(const FileDescriptorSet& from);
+  int Compare(const FileDescriptorSet& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -268,8 +271,11 @@ class LIBPROTOBUF_EXPORT FileDescriptorProto : public ::google::protobuf::Messag
   FileDescriptorProto* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const FileDescriptorProto& from);
   void MergeFrom(const FileDescriptorProto& from);
+  int Compare(const FileDescriptorProto& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -489,8 +495,11 @@ class LIBPROTOBUF_EXPORT DescriptorProto_ExtensionRange : public ::google::proto
   DescriptorProto_ExtensionRange* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const DescriptorProto_ExtensionRange& from);
   void MergeFrom(const DescriptorProto_ExtensionRange& from);
+  int Compare(const DescriptorProto_ExtensionRange& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -581,8 +590,11 @@ class LIBPROTOBUF_EXPORT DescriptorProto : public ::google::protobuf::Message {
   DescriptorProto* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const DescriptorProto& from);
   void MergeFrom(const DescriptorProto& from);
+  int Compare(const DescriptorProto& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -747,8 +759,11 @@ class LIBPROTOBUF_EXPORT FieldDescriptorProto : public ::google::protobuf::Messa
   FieldDescriptorProto* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const FieldDescriptorProto& from);
   void MergeFrom(const FieldDescriptorProto& from);
+  int Compare(const FieldDescriptorProto& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -986,8 +1001,11 @@ class LIBPROTOBUF_EXPORT EnumDescriptorProto : public ::google::protobuf::Messag
   EnumDescriptorProto* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const EnumDescriptorProto& from);
   void MergeFrom(const EnumDescriptorProto& from);
+  int Compare(const EnumDescriptorProto& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -1098,8 +1116,11 @@ class LIBPROTOBUF_EXPORT EnumValueDescriptorProto : public ::google::protobuf::M
   EnumValueDescriptorProto* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const EnumValueDescriptorProto& from);
   void MergeFrom(const EnumValueDescriptorProto& from);
+  int Compare(const EnumValueDescriptorProto& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -1207,8 +1228,11 @@ class LIBPROTOBUF_EXPORT ServiceDescriptorProto : public ::google::protobuf::Mes
   ServiceDescriptorProto* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const ServiceDescriptorProto& from);
   void MergeFrom(const ServiceDescriptorProto& from);
+  int Compare(const ServiceDescriptorProto& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -1319,8 +1343,11 @@ class LIBPROTOBUF_EXPORT MethodDescriptorProto : public ::google::protobuf::Mess
   MethodDescriptorProto* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const MethodDescriptorProto& from);
   void MergeFrom(const MethodDescriptorProto& from);
+  int Compare(const MethodDescriptorProto& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -1448,8 +1475,11 @@ class LIBPROTOBUF_EXPORT FileOptions : public ::google::protobuf::Message {
   FileOptions* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const FileOptions& from);
   void MergeFrom(const FileOptions& from);
+  int Compare(const FileOptions& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -1666,8 +1696,11 @@ class LIBPROTOBUF_EXPORT MessageOptions : public ::google::protobuf::Message {
   MessageOptions* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const MessageOptions& from);
   void MergeFrom(const MessageOptions& from);
+  int Compare(const MessageOptions& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -1774,8 +1807,11 @@ class LIBPROTOBUF_EXPORT FieldOptions : public ::google::protobuf::Message {
   FieldOptions* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const FieldOptions& from);
   void MergeFrom(const FieldOptions& from);
+  int Compare(const FieldOptions& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -1870,6 +1906,39 @@ class LIBPROTOBUF_EXPORT FieldOptions : public ::google::protobuf::Message {
   inline bool weak() const;
   inline void set_weak(bool value);
 
+  // optional bool omit = 11 [default = false];
+  inline bool has_omit() const;
+  inline void clear_omit();
+  static const int kOmitFieldNumber = 11;
+  inline bool omit() const;
+  inline void set_omit(bool value);
+
+  // optional bool comparable = 12 [default = false];
+  inline bool has_comparable() const;
+  inline void clear_comparable();
+  static const int kComparableFieldNumber = 12;
+  inline bool comparable() const;
+  inline void set_comparable(bool value);
+
+  // optional bool ordered = 13 [default = false];
+  inline bool has_ordered() const;
+  inline void clear_ordered();
+  static const int kOrderedFieldNumber = 13;
+  inline bool ordered() const;
+  inline void set_ordered(bool value);
+
+  // optional string enum_type = 14;
+  inline bool has_enum_type() const;
+  inline void clear_enum_type();
+  static const int kEnumTypeFieldNumber = 14;
+  inline const ::std::string& enum_type() const;
+  inline void set_enum_type(const ::std::string& value);
+  inline void set_enum_type(const char* value);
+  inline void set_enum_type(const char* value, size_t size);
+  inline ::std::string* mutable_enum_type();
+  inline ::std::string* release_enum_type();
+  inline void set_allocated_enum_type(::std::string* enum_type);
+
   // repeated .google.protobuf.UninterpretedOption uninterpreted_option = 999;
   inline int uninterpreted_option_size() const;
   inline void clear_uninterpreted_option();
@@ -1897,6 +1966,14 @@ class LIBPROTOBUF_EXPORT FieldOptions : public ::google::protobuf::Message {
   inline void clear_has_experimental_map_key();
   inline void set_has_weak();
   inline void clear_has_weak();
+  inline void set_has_omit();
+  inline void clear_has_omit();
+  inline void set_has_comparable();
+  inline void clear_has_comparable();
+  inline void set_has_ordered();
+  inline void clear_has_ordered();
+  inline void set_has_enum_type();
+  inline void clear_has_enum_type();
 
   ::google::protobuf::internal::ExtensionSet _extensions_;
 
@@ -1908,10 +1985,14 @@ class LIBPROTOBUF_EXPORT FieldOptions : public ::google::protobuf::Message {
   bool deprecated_;
   bool weak_;
   ::std::string* experimental_map_key_;
+  ::std::string* enum_type_;
   ::google::protobuf::RepeatedPtrField< ::google::protobuf::UninterpretedOption > uninterpreted_option_;
+  bool omit_;
+  bool comparable_;
+  bool ordered_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(7 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(11 + 31) / 32];
 
   friend void LIBPROTOBUF_EXPORT protobuf_AddDesc_google_2fprotobuf_2fdescriptor_2eproto();
   friend void protobuf_AssignDesc_google_2fprotobuf_2fdescriptor_2eproto();
@@ -1952,8 +2033,11 @@ class LIBPROTOBUF_EXPORT EnumOptions : public ::google::protobuf::Message {
   EnumOptions* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const EnumOptions& from);
   void MergeFrom(const EnumOptions& from);
+  int Compare(const EnumOptions& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -2050,8 +2134,11 @@ class LIBPROTOBUF_EXPORT EnumValueOptions : public ::google::protobuf::Message {
   EnumValueOptions* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const EnumValueOptions& from);
   void MergeFrom(const EnumValueOptions& from);
+  int Compare(const EnumValueOptions& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -2138,8 +2225,11 @@ class LIBPROTOBUF_EXPORT ServiceOptions : public ::google::protobuf::Message {
   ServiceOptions* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const ServiceOptions& from);
   void MergeFrom(const ServiceOptions& from);
+  int Compare(const ServiceOptions& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -2226,8 +2316,11 @@ class LIBPROTOBUF_EXPORT MethodOptions : public ::google::protobuf::Message {
   MethodOptions* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const MethodOptions& from);
   void MergeFrom(const MethodOptions& from);
+  int Compare(const MethodOptions& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -2314,8 +2407,11 @@ class LIBPROTOBUF_EXPORT UninterpretedOption_NamePart : public ::google::protobu
   UninterpretedOption_NamePart* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const UninterpretedOption_NamePart& from);
   void MergeFrom(const UninterpretedOption_NamePart& from);
+  int Compare(const UninterpretedOption_NamePart& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -2411,8 +2507,11 @@ class LIBPROTOBUF_EXPORT UninterpretedOption : public ::google::protobuf::Messag
   UninterpretedOption* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const UninterpretedOption& from);
   void MergeFrom(const UninterpretedOption& from);
+  int Compare(const UninterpretedOption& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -2573,8 +2672,11 @@ class LIBPROTOBUF_EXPORT SourceCodeInfo_Location : public ::google::protobuf::Me
   SourceCodeInfo_Location* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const SourceCodeInfo_Location& from);
   void MergeFrom(const SourceCodeInfo_Location& from);
+  int Compare(const SourceCodeInfo_Location& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -2703,8 +2805,11 @@ class LIBPROTOBUF_EXPORT SourceCodeInfo : public ::google::protobuf::Message {
   SourceCodeInfo* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const SourceCodeInfo& from);
   void MergeFrom(const SourceCodeInfo& from);
+  int Compare(const SourceCodeInfo& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -5167,6 +5272,142 @@ inline bool FieldOptions::weak() const {
 inline void FieldOptions::set_weak(bool value) {
   set_has_weak();
   weak_ = value;
+}
+
+// optional bool omit = 11 [default = false];
+inline bool FieldOptions::has_omit() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void FieldOptions::set_has_omit() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void FieldOptions::clear_has_omit() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void FieldOptions::clear_omit() {
+  omit_ = false;
+  clear_has_omit();
+}
+inline bool FieldOptions::omit() const {
+  return omit_;
+}
+inline void FieldOptions::set_omit(bool value) {
+  set_has_omit();
+  omit_ = value;
+}
+
+// optional bool comparable = 12 [default = false];
+inline bool FieldOptions::has_comparable() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void FieldOptions::set_has_comparable() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void FieldOptions::clear_has_comparable() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void FieldOptions::clear_comparable() {
+  comparable_ = false;
+  clear_has_comparable();
+}
+inline bool FieldOptions::comparable() const {
+  return comparable_;
+}
+inline void FieldOptions::set_comparable(bool value) {
+  set_has_comparable();
+  comparable_ = value;
+}
+
+// optional bool ordered = 13 [default = false];
+inline bool FieldOptions::has_ordered() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void FieldOptions::set_has_ordered() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void FieldOptions::clear_has_ordered() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void FieldOptions::clear_ordered() {
+  ordered_ = false;
+  clear_has_ordered();
+}
+inline bool FieldOptions::ordered() const {
+  return ordered_;
+}
+inline void FieldOptions::set_ordered(bool value) {
+  set_has_ordered();
+  ordered_ = value;
+}
+
+// optional string enum_type = 14;
+inline bool FieldOptions::has_enum_type() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void FieldOptions::set_has_enum_type() {
+  _has_bits_[0] |= 0x00000200u;
+}
+inline void FieldOptions::clear_has_enum_type() {
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline void FieldOptions::clear_enum_type() {
+  if (enum_type_ != &::google::protobuf::internal::GetEmptyString()) {
+    enum_type_->clear();
+  }
+  clear_has_enum_type();
+}
+inline const ::std::string& FieldOptions::enum_type() const {
+  return *enum_type_;
+}
+inline void FieldOptions::set_enum_type(const ::std::string& value) {
+  set_has_enum_type();
+  if (enum_type_ == &::google::protobuf::internal::GetEmptyString()) {
+    enum_type_ = new ::std::string;
+  }
+  enum_type_->assign(value);
+}
+inline void FieldOptions::set_enum_type(const char* value) {
+  set_has_enum_type();
+  if (enum_type_ == &::google::protobuf::internal::GetEmptyString()) {
+    enum_type_ = new ::std::string;
+  }
+  enum_type_->assign(value);
+}
+inline void FieldOptions::set_enum_type(const char* value, size_t size) {
+  set_has_enum_type();
+  if (enum_type_ == &::google::protobuf::internal::GetEmptyString()) {
+    enum_type_ = new ::std::string;
+  }
+  enum_type_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* FieldOptions::mutable_enum_type() {
+  set_has_enum_type();
+  if (enum_type_ == &::google::protobuf::internal::GetEmptyString()) {
+    enum_type_ = new ::std::string;
+  }
+  return enum_type_;
+}
+inline ::std::string* FieldOptions::release_enum_type() {
+  clear_has_enum_type();
+  if (enum_type_ == &::google::protobuf::internal::GetEmptyString()) {
+    return NULL;
+  } else {
+    ::std::string* temp = enum_type_;
+    enum_type_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyString());
+    return temp;
+  }
+}
+inline void FieldOptions::set_allocated_enum_type(::std::string* enum_type) {
+  if (enum_type_ != &::google::protobuf::internal::GetEmptyString()) {
+    delete enum_type_;
+  }
+  if (enum_type) {
+    set_has_enum_type();
+    enum_type_ = enum_type;
+  } else {
+    clear_has_enum_type();
+    enum_type_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyString());
+  }
 }
 
 // repeated .google.protobuf.UninterpretedOption uninterpreted_option = 999;

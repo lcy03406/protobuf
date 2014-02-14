@@ -108,6 +108,35 @@ GenerateSwappingCode(io::Printer* printer) const {
 }
 
 void EnumFieldGenerator::
+GenerateCompareCode(io::Printer* printer) const {
+  printer->Print(variables_,
+    "{\n"
+    "  $type$ t1 = $name$_;\n"
+    "  $type$ t2 = other.$name$_;\n"
+    "  if (t1 != t2)\n"
+    "    return (t1 > t2) ? 1 : -1;\n"
+    "}\n");
+}
+
+void EnumFieldGenerator::
+GenerateKeyCompareCode(io::Printer* printer) const {
+  printer->Print(variables_,
+    "Compare(int key) const {\n"
+    "  $type$ t1 = $name$_;\n"
+    "  $type$ t2 = other.$name$_;\n"
+    "  if (t1 != t2)\n"
+    "    return (t1 > t2) ? 1 : -1;\n"
+    "  return 0;\n"
+    "}\n");
+}
+
+void EnumFieldGenerator::
+GenerateKeyCompareDeclaration(io::Printer* printer) const {
+  printer->Print(variables_,
+    "int Compare(int key) const;\n");
+}
+
+void EnumFieldGenerator::
 GenerateConstructorCode(io::Printer* printer) const {
   printer->Print(variables_, "$name$_ = $default$;\n");
 }
@@ -221,6 +250,21 @@ GenerateMergingCode(io::Printer* printer) const {
 void RepeatedEnumFieldGenerator::
 GenerateSwappingCode(io::Printer* printer) const {
   printer->Print(variables_, "$name$_.Swap(&other->$name$_);\n");
+}
+
+void RepeatedEnumFieldGenerator::
+GenerateCompareCode(io::Printer* printer) const {
+  // Not needed for repeated fields.
+}
+
+void RepeatedEnumFieldGenerator::
+GenerateKeyCompareCode(io::Printer* printer) const {
+  // Not needed for repeated fields.
+}
+
+void RepeatedEnumFieldGenerator::
+GenerateKeyCompareDeclaration(io::Printer* printer) const {
+  // Not needed for repeated fields.
 }
 
 void RepeatedEnumFieldGenerator::

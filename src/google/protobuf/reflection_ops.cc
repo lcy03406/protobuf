@@ -262,6 +262,95 @@ void ReflectionOps::FindInitializationErrors(
   }
 }
 
+void ReflectionOps::SortFields(Message* message) {
+  const Descriptor* descriptor = message->GetDescriptor();
+  const Reflection* reflection = message->GetReflection();
+
+  for (int i = 0; i < descriptor->field_count(); i++) {
+    const FieldDescriptor* field = descriptor->field(i);
+    if (field->is_ordered()) {
+      switch (field->cpp_type()) {
+#define HANDLE_TYPE(CPPTYPE, METHOD, TYPE)                                        \
+        case FieldDescriptor::CPPTYPE_##CPPTYPE:                                  \
+          reflection->MutableRepeatedField<TYPE>(message, field)->Sort();         \
+          break;
+
+        HANDLE_TYPE(INT32 , Int32 , int32 );
+        HANDLE_TYPE(INT64 , Int64 , int64 );
+        HANDLE_TYPE(UINT32, UInt32, uint32);
+        HANDLE_TYPE(UINT64, UInt64, uint64);
+        HANDLE_TYPE(FLOAT , Float , float );
+        HANDLE_TYPE(DOUBLE, Double, double);
+        HANDLE_TYPE(BOOL  , Bool  , bool  );
+        HANDLE_TYPE(ENUM  , Enum  , int   );
+#undef HANDLE_TYPE
+
+        case FieldDescriptor::CPPTYPE_STRING:
+          reflection->MutableRepeatedPtrField<std::string>(message, field)->Sort();
+          break;
+        case FieldDescriptor::CPPTYPE_MESSAGE:
+          reflection->MutableRepeatedPtrField<Message>(message, field)->Sort();
+          break;
+      }
+    }
+  }
+}
+
+int ReflectionOps::Compare(const Message& a, const Message& b) {
+  if (&a == &b) return 0;
+  
+  const Descriptor* descriptor = a.GetDescriptor();
+  GOOGLE_CHECK_EQ(b.GetDescriptor(), descriptor)
+    << "Tried to compare messages of different types.";
+
+  const Reflection* a_reflection = a.GetReflection();
+  const Reflection* b_reflection = a.GetReflection();
+
+  for (int i = 0; i < descriptor->field_count(); i++) {
+    const FieldDescriptor* field = descriptor->field(i);
+    if (field->is_comparable()) {
+      switch (field->cpp_type()) {
+#define HANDLE_TYPE(CPPTYPE, METHOD, TYPE)                                     \
+        case FieldDescriptor::CPPTYPE_##CPPTYPE: {                             \
+          TYPE t1 = a_reflection->Get##METHOD(a, field);                       \
+          TYPE t2 = b_reflection->Get##METHOD(b, field);                       \
+          if (t1 != t2)                                                        \
+            return (t1 > t2) ? 1 : -1;                                         \
+        } break;
+
+        HANDLE_TYPE(INT32 , Int32 , int32 );
+        HANDLE_TYPE(INT64 , Int64 , int64 );
+        HANDLE_TYPE(UINT32, UInt32, uint32);
+        HANDLE_TYPE(UINT64, UInt64, uint64);
+        HANDLE_TYPE(FLOAT , Float , float);
+        HANDLE_TYPE(DOUBLE, Double, double);
+        HANDLE_TYPE(BOOL  , Bool  , bool);
+#undef HANDLE_TYPE
+
+        case FieldDescriptor::CPPTYPE_ENUM: {
+          auto t1 = a_reflection->GetEnum(a, field)->number();
+          auto t2 = b_reflection->GetEnum(b, field)->number();
+          if (t1 != t2)
+            return (t1 > t2) ? 1 : -1;
+        } break;
+        case FieldDescriptor::CPPTYPE_STRING: {
+          int d = strcmp(a_reflection->GetString(a, field).c_str(),
+            b_reflection->GetString(b, field).c_str());
+          if (d)
+            return d;
+        } break;
+        case FieldDescriptor::CPPTYPE_MESSAGE: {
+          int d =  Compare(a_reflection->GetMessage(a, field),
+            b_reflection->GetMessage(b, field));
+          if (d)
+            return d;
+        } break;
+      }
+    }
+  }
+  return 0;
+}
+
 }  // namespace internal
 }  // namespace protobuf
 }  // namespace google

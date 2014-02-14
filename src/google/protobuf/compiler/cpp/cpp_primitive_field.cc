@@ -148,6 +148,35 @@ GenerateSwappingCode(io::Printer* printer) const {
 }
 
 void PrimitiveFieldGenerator::
+GenerateCompareCode(io::Printer* printer) const {
+  printer->Print(variables_,
+    "{\n"
+    "  $type$ t1 = $name$_;\n"
+    "  $type$ t2 = other.$name$_;\n"
+    "  if (t1 != t2)\n"
+    "    return (t1 > t2) ? 1 : -1;\n"
+    "}\n");
+}
+
+void PrimitiveFieldGenerator::
+GenerateKeyCompareCode(io::Printer* printer) const {
+  printer->Print(variables_,
+    "Compare($type$ key) const {\n"
+    "  $type$ t1 = $name$_;\n"
+    "  $type$ t2 = other.$name$_;\n"
+    "  if (t1 != t2)\n"
+    "    return (t1 > t2) ? 1 : -1;\n"
+    "  return 0;\n"
+    "}\n");
+}
+
+void PrimitiveFieldGenerator::
+GenerateKeyCompareDeclaration(io::Printer* printer) const {
+  printer->Print(variables_,
+    "int Compare($type$ key) const;\n");
+}
+
+void PrimitiveFieldGenerator::
 GenerateConstructorCode(io::Printer* printer) const {
   printer->Print(variables_, "$name$_ = $default$;\n");
 }
@@ -267,6 +296,21 @@ GenerateMergingCode(io::Printer* printer) const {
 void RepeatedPrimitiveFieldGenerator::
 GenerateSwappingCode(io::Printer* printer) const {
   printer->Print(variables_, "$name$_.Swap(&other->$name$_);\n");
+}
+
+void RepeatedPrimitiveFieldGenerator::
+GenerateCompareCode(io::Printer* printer) const {
+  // Not needed for repeated fields.
+}
+
+void RepeatedPrimitiveFieldGenerator::
+GenerateKeyCompareCode(io::Printer* printer) const {
+  // Not needed for repeated fields.
+}
+
+void RepeatedPrimitiveFieldGenerator::
+GenerateKeyCompareDeclaration(io::Printer* printer) const {
+  // Not needed for repeated fields.
 }
 
 void RepeatedPrimitiveFieldGenerator::

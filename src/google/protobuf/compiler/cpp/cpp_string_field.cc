@@ -225,6 +225,27 @@ GenerateSwappingCode(io::Printer* printer) const {
 }
 
 void StringFieldGenerator::
+GenerateCompareCode(io::Printer* printer) const {
+  printer->Print(variables_,
+    "if (int d = strcmp($name$_->c_str(), other.$name$_->c_str()))\n"
+    "  return d;\n");
+}
+
+void StringFieldGenerator::
+GenerateKeyCompareCode(io::Printer* printer) const {
+  printer->Print(variables_,
+    "Compare(const ::std::string& key) const {\n"
+    "  return strcmp($name$_->c_str(), key.c_str());\n"
+    "}\n");
+}
+
+void StringFieldGenerator::
+GenerateKeyCompareDeclaration(io::Printer* printer) const {
+  printer->Print(variables_,
+    "int Compare(const ::std::string& key) const;\n");
+}
+
+void StringFieldGenerator::
 GenerateConstructorCode(io::Printer* printer) const {
   printer->Print(variables_,
     "$name$_ = const_cast< ::std::string*>($default_variable$);\n");
@@ -419,6 +440,21 @@ GenerateMergingCode(io::Printer* printer) const {
 void RepeatedStringFieldGenerator::
 GenerateSwappingCode(io::Printer* printer) const {
   printer->Print(variables_, "$name$_.Swap(&other->$name$_);\n");
+}
+
+void RepeatedStringFieldGenerator::
+GenerateCompareCode(io::Printer* printer) const {
+  // Not needed for repeated fields.
+}
+
+void RepeatedStringFieldGenerator::
+GenerateKeyCompareCode(io::Printer* printer) const {
+  // Not needed for repeated fields.
+}
+
+void RepeatedStringFieldGenerator::
+GenerateKeyCompareDeclaration(io::Printer* printer) const {
+  // Not needed for repeated fields.
 }
 
 void RepeatedStringFieldGenerator::

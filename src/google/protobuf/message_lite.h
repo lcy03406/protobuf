@@ -107,6 +107,9 @@ class LIBPROTOBUF_EXPORT MessageLite {
   // results are undefined (probably crash).
   virtual void CheckTypeAndMergeFrom(const MessageLite& other) = 0;
 
+  virtual int CheckTypeAndCompare(const MessageLite& other) const = 0;
+  virtual void SortFields() = 0;
+
   // Parsing ---------------------------------------------------------
   // Methods for parsing in protocol buffer format.  Most of these are
   // just simple wrappers around MergeFromCodedStream().

@@ -72,8 +72,11 @@ class LIBPROTOC_EXPORT CodeGeneratorRequest : public ::google::protobuf::Message
   CodeGeneratorRequest* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const CodeGeneratorRequest& from);
   void MergeFrom(const CodeGeneratorRequest& from);
+  int Compare(const CodeGeneratorRequest& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -189,8 +192,11 @@ class LIBPROTOC_EXPORT CodeGeneratorResponse_File : public ::google::protobuf::M
   CodeGeneratorResponse_File* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const CodeGeneratorResponse_File& from);
   void MergeFrom(const CodeGeneratorResponse_File& from);
+  int Compare(const CodeGeneratorResponse_File& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 
@@ -306,8 +312,11 @@ class LIBPROTOC_EXPORT CodeGeneratorResponse : public ::google::protobuf::Messag
   CodeGeneratorResponse* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  int Compare(const ::google::protobuf::Message& other) const;
   void CopyFrom(const CodeGeneratorResponse& from);
   void MergeFrom(const CodeGeneratorResponse& from);
+  int Compare(const CodeGeneratorResponse& other) const;
+  void SortFields();
   void Clear();
   bool IsInitialized() const;
 

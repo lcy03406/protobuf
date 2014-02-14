@@ -58,6 +58,9 @@ class StringFieldGenerator : public FieldGenerator {
   void GenerateClearingCode(io::Printer* printer) const;
   void GenerateMergingCode(io::Printer* printer) const;
   void GenerateSwappingCode(io::Printer* printer) const;
+  void GenerateCompareCode(io::Printer* printer) const;
+  void GenerateKeyCompareCode(io::Printer* printer) const;
+  void GenerateKeyCompareDeclaration(io::Printer* printer) const;
   void GenerateConstructorCode(io::Printer* printer) const;
   void GenerateDestructorCode(io::Printer* printer) const;
   void GenerateDefaultInstanceAllocator(io::Printer* printer) const;
@@ -87,6 +90,9 @@ class RepeatedStringFieldGenerator : public FieldGenerator {
   void GenerateClearingCode(io::Printer* printer) const;
   void GenerateMergingCode(io::Printer* printer) const;
   void GenerateSwappingCode(io::Printer* printer) const;
+  void GenerateCompareCode(io::Printer* printer) const;
+  void GenerateKeyCompareCode(io::Printer* printer) const;
+  void GenerateKeyCompareDeclaration(io::Printer* printer) const;
   void GenerateConstructorCode(io::Printer* printer) const;
   void GenerateMergeFromCodedStream(io::Printer* printer) const;
   void GenerateSerializeWithCachedSizes(io::Printer* printer) const;

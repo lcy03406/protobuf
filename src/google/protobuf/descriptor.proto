@@ -411,6 +411,18 @@ message FieldOptions {
 
   // For Google-internal migration only. Do not use.
   optional bool weak = 10 [default=false];
+  
+  // Omitted fields are not included in wire format.
+  optional bool omit = 11 [default=false];
+  
+  // Compare the message based on its comparable fields
+  optional bool comparable = 12 [default=false];
+
+  // Sort the repeated firld.
+  optional bool ordered = 13 [default=false];
+  
+  // Use a enum value for an int field.
+  optional string enum_type = 14;
 
   // The parser stores options it doesn't recognize here. See above.
   repeated UninterpretedOption uninterpreted_option = 999;

@@ -168,6 +168,40 @@ class RepeatedField {
   // sizeof(*this)
   int SpaceUsedExcludingSelf() const;
 
+  void Sort() {
+    std::stable_sort(begin(), end());
+  }
+  iterator upper_bound(const Element& value) {
+    return std::upper_bound(begin(), end(), value);
+  }
+  const_iterator upper_bound(const Element& value) const {
+    return std::upper_bound(begin(), end(), value);
+  }
+  iterator lower_bound(const Element& value) {
+    return std::lower_bound(begin(), end(), value);
+  }
+  const_iterator lower_bound(const Element& value) const {
+    return std::lower_bound(begin(), end(), value);
+  }
+  std::pair<iterator, iterator> equal_range(const Element& value) {
+    return std::equal_range(begin(), end(), value);
+  }
+  std::pair<const_iterator, const_iterator> equal_range(const Element& value) const {
+    return std::equal_range(begin(), end(), value);
+  }
+  iterator find(const Element& value) {
+    iterator it = lower_bound(value);
+    return it == end() || value < *it ? end() : it;
+  }
+  const_iterator find(const Element& value) const {
+    const_iterator it = lower_bound(value);
+    return it == end() || value < *it ? end() : it;
+  }
+  iterator insert(const Element& value);
+  iterator erase(const_iterator position);
+  iterator erase(const_iterator first, const_iterator last);
+  int erase(const Element& value);
+
  private:
   static const int kInitialSize = 0;
 
@@ -217,6 +251,8 @@ namespace internal {
 //     static void Delete(Type*);
 //     static void Clear(Type*);
 //     static void Merge(const Type& from, Type* to);
+//     static bool PtrLess(const void* a, const void* b);
+//     static bool Less(const void* a, const void* b);
 //
 //     // Only needs to be implemented if SpaceUsedExcludingSelf() is called.
 //     static int SpaceUsed(const Type&);
@@ -328,6 +364,58 @@ class LIBPROTOBUF_EXPORT RepeatedPtrFieldBase {
   }
 };
 
+template <typename T, typename K>
+class AnyLess {
+ public:
+  bool operator () (const T& a, const K& b) {
+    return a.Compare(b) < 0;
+  }
+  bool operator () (const K& a, const T& b) {
+    return b.Compare(a) > 0;
+  }
+};
+template <typename T>
+class AnyLess<T,T> {
+ public:
+  bool operator () (const T& a, const T& b) {
+    return a.Compare(b) < 0;
+  }
+};
+template <typename K>
+class AnyLess<MessageLite,K> {
+ public:
+  bool operator () (const MessageLite& a, const K& b) {
+    return a.CheckTypeAndCompare(b) < 0;
+  }
+  bool operator () (const K& a, const MessageLite& b) {
+    return b.CheckTypeAndCompare(a) > 0;
+  }
+};
+template <>
+class AnyLess<MessageLite,MessageLite> {
+ public:
+  bool operator () (const MessageLite& a, const MessageLite& b) {
+    return a.CheckTypeAndCompare(b) < 0;
+  }
+};
+template <typename K>
+class AnyLess<string,K> {
+ public:
+  bool operator () (const string& a, const K& b) {
+    return a < b;
+  }
+  bool operator () (const K& a, const string& b) {
+    return b > a;
+  }
+};
+template <>
+class AnyLess<string,string> {
+ public:
+  bool operator () (const string& a, const string& b) {
+    return a < b;
+  }
+};
+
 template <typename GenericType>
 class GenericTypeHandler {
  public:
@@ -338,14 +426,35 @@ class GenericTypeHandler {
   static void Merge(const GenericType& from, GenericType* to) {
     to->MergeFrom(from);
   }
+  static bool PtrLess(const void* a, const void* b) {
+    return cast(a)->Compare(*cast(b)) < 0;
+  }
+  static bool Less(const GenericType& a, const GenericType& b) {
+    return a.Compare(b) < 0;
+  }
   static int SpaceUsed(const GenericType& value) { return value.SpaceUsed(); }
   static const Type& default_instance() { return Type::default_instance(); }
+ private:
+  static inline const Type* cast(const void* element) {
+    return reinterpret_cast<const Type*>(element);
+  }
 };
 
 template <>
 inline void GenericTypeHandler<MessageLite>::Merge(
     const MessageLite& from, MessageLite* to) {
   to->CheckTypeAndMergeFrom(from);
+}
+
+template <>
+inline bool GenericTypeHandler<MessageLite>::PtrLess(
+    const void* a, const void* b) {
+  return cast(a)->CheckTypeAndCompare(*cast(b)) < 0;
+}
+template <>
+inline bool GenericTypeHandler<MessageLite>::Less(
+    const MessageLite& a, const MessageLite& b) {
+  return a.CheckTypeAndCompare(b) < 0;
 }
 
 template <>
@@ -382,8 +491,18 @@ class LIBPROTOBUF_EXPORT StringTypeHandlerBase {
   static void Delete(string* value);
   static void Clear(string* value) { value->clear(); }
   static void Merge(const string& from, string* to) { *to = from; }
+  static bool PtrLess(const void* a, const void* b) {
+    return *cast(a) < *cast(b);
+  }
+  static bool Less(const string& a, const string& b) {
+    return a < b;
+  }
   static const Type& default_instance() {
     return ::google::protobuf::internal::GetEmptyString();
+  }
+ private:
+  static inline const Type* cast(const void* element) {
+    return reinterpret_cast<const Type*>(element);
   }
 };
 
@@ -536,13 +655,35 @@ class RepeatedPtrField : public internal::RepeatedPtrFieldBase {
   // Requires:  ClearedCount() > 0
   Element* ReleaseCleared();
 
+  void Sort();
+  template <typename KeyType>
+  iterator upper_bound(const KeyType& value);
+  template <typename KeyType>
+  const_iterator upper_bound(const KeyType& value) const;
+  template <typename KeyType>
+  iterator lower_bound(const KeyType& value);
+  template <typename KeyType>
+  const_iterator lower_bound(const KeyType& value) const;
+  template <typename KeyType>
+  std::pair<iterator, iterator> equal_range(const KeyType& value);
+  template <typename KeyType>
+  std::pair<const_iterator, const_iterator> equal_range(const KeyType& value) const;
+  template <typename KeyType>
+  iterator find(const KeyType& value);
+  template <typename KeyType>
+  const_iterator find(const KeyType& value) const;
+  iterator SortLast();
+  iterator insert(const Element& value);
+  iterator erase(const_iterator position);
+  iterator erase(const_iterator first, const_iterator last);
+  int erase(const Element& value);
+
  protected:
   // Note:  RepeatedPtrField SHOULD NOT be subclassed by users.  We only
   //   subclass it in one place as a hack for compatibility with proto1.  The
   //   subclass needs to know about TypeHandler in order to call protected
   //   methods on RepeatedPtrFieldBase.
   class TypeHandler;
-
 };
 
 // implementation ====================================================
@@ -763,6 +904,48 @@ template <typename Element>
 inline void RepeatedField<Element>::Truncate(int new_size) {
   GOOGLE_DCHECK_LE(new_size, current_size_);
   current_size_ = new_size;
+}
+
+template <typename Element>
+inline typename RepeatedField<Element>::iterator
+RepeatedField<Element>::insert(const Element& value) {
+  if (current_size_ == total_size_) Reserve(total_size_ + 1);
+  Element *pos = std::upper_bound(elements_, elements_ + current_size_, value);
+  if (int d = elements_ + current_size_ - pos) {
+    std::copy_backward(pos, elements_ + current_size_, pos + 1);
+  }
+  *pos = value;
+  current_size_++;
+  return pos;
+}
+template <typename Element>
+inline typename RepeatedField<Element>::iterator
+RepeatedField<Element>::erase(typename RepeatedField<Element>::const_iterator position) {
+  Element *pos = elements_ + (position - begin());
+  if (int d = elements_ + current_size_ - pos - 1) {
+    std::copy(pos + 1, elements_ + current_size_, pos);
+  }
+  current_size_--;
+  return pos;
+}
+template <typename Element>
+inline typename RepeatedField<Element>::iterator
+RepeatedField<Element>::erase(typename RepeatedField<Element>::const_iterator first,
+    typename RepeatedField<Element>::const_iterator last) {
+  Element *pfirst = elements_ + (first - begin());
+  Element *plast = elements_ + (last - begin());
+  if (int d = elements_ + current_size_ - plast) {
+    std::copy(plast, elements_ + current_size_, pfirst);
+  }
+  current_size_ -= plast - pfirst;
+  return pfirst;
+}
+template <typename Element>
+inline int RepeatedField<Element>::erase(const Element& value) {
+  std::pair<iterator, iterator> pr = equal_range(value);
+  int n = pr.second - pr.first;
+  erase(pr.first, pr.second);
+  return n;
 }
 
 template <typename Element>
@@ -1359,6 +1542,113 @@ template <typename Element>
 inline typename RepeatedPtrField<Element>::const_iterator
 RepeatedPtrField<Element>::end() const {
   return iterator(raw_data() + size());
+}
+
+template <typename Element>
+inline void RepeatedPtrField<Element>::Sort() {
+  std::stable_sort(pointer_begin(), pointer_end(), TypeHandler::PtrLess);
+}
+template <typename Element>
+template <typename KeyType>
+inline typename RepeatedPtrField<Element>::iterator
+RepeatedPtrField<Element>::upper_bound(const KeyType& value) {
+  return std::upper_bound(begin(), end(), value, internal::AnyLess<Element,KeyType>());
+}
+template <typename Element>
+template <typename KeyType>
+inline typename RepeatedPtrField<Element>::const_iterator
+RepeatedPtrField<Element>::upper_bound(const KeyType& value) const {
+  return std::upper_bound(begin(), end(), value, internal::AnyLess<Element,KeyType>());
+}
+template <typename Element>
+template <typename KeyType>
+inline typename RepeatedPtrField<Element>::iterator
+RepeatedPtrField<Element>::lower_bound(const KeyType& value) {
+  return std::lower_bound(begin(), end(), value, internal::AnyLess<Element,KeyType>());
+}
+template <typename Element>
+template <typename KeyType>
+inline typename RepeatedPtrField<Element>::const_iterator
+RepeatedPtrField<Element>::lower_bound(const KeyType& value) const {
+  return std::lower_bound(begin(), end(), value, internal::AnyLess<Element,KeyType>());
+}
+template <typename Element>
+template <typename KeyType>
+inline std::pair<typename RepeatedPtrField<Element>::iterator, typename RepeatedPtrField<Element>::iterator>
+RepeatedPtrField<Element>::equal_range(const KeyType& value) {
+  return std::equal_range(begin(), end(), value, internal::AnyLess<Element,KeyType>());
+}
+template <typename Element>
+template <typename KeyType>
+inline std::pair<typename RepeatedPtrField<Element>::const_iterator, typename RepeatedPtrField<Element>::const_iterator>
+RepeatedPtrField<Element>::equal_range(const KeyType& value) const {
+  return std::equal_range(begin(), end(), value, internal::AnyLess<Element,KeyType>());
+}
+template <typename Element>
+template <typename KeyType>
+inline typename RepeatedPtrField<Element>::iterator
+RepeatedPtrField<Element>::find(const KeyType& value) {
+  iterator it = lower_bound(value);
+  return it == end() || internal::AnyLess<Element,KeyType>()(value, *it) ? end() : it;
+}
+template <typename Element>
+template <typename KeyType>
+inline typename RepeatedPtrField<Element>::const_iterator
+RepeatedPtrField<Element>::find(const KeyType& value) const {
+  const_iterator it = lower_bound(value);
+  return it == end() || internal::AnyLess<Element,KeyType>()(value, *it) ? end() : it;
+}
+template <typename Element>
+inline typename RepeatedPtrField<Element>::iterator
+RepeatedPtrField<Element>::SortLast() {
+  int sorted_size = size() - 1;
+  void *p = raw_data()[sorted_size];
+  void **pos = std::upper_bound(raw_mutable_data(), raw_mutable_data() + sorted_size, p, TypeHandler::PtrLess);
+  if (int d = raw_data() + sorted_size - pos) {
+    std::copy_backward(pos, raw_mutable_data() + sorted_size, pos + 1);
+  }
+  *pos = p;
+  return iterator(pos);
+}
+template <typename Element>
+inline typename RepeatedPtrField<Element>::iterator
+RepeatedPtrField<Element>::insert(const Element& value) {
+  Element *p = Add();
+  TypeHandler::Merge(value, p);
+  return SortLast();
+}
+template <typename Element>
+inline typename RepeatedPtrField<Element>::iterator
+RepeatedPtrField<Element>::erase(typename RepeatedPtrField<Element>::const_iterator position) {
+  GOOGLE_DCHECK_GE(position, begin());
+  GOOGLE_DCHECK_LT(position, end());
+  void **pos = raw_mutable_data() + (position - begin());
+  void *p = *pos;
+  if (int d = raw_data() + size() - pos - 1) {
+    std::copy(pos + 1, raw_mutable_data() + size(), pos);
+  }
+  raw_mutable_data()[size() - 1] = p;
+  int i = pos - raw_data();
+  RemoveLast();
+  return iterator(raw_data() + i);
+}
+template <typename Element>
+inline typename RepeatedPtrField<Element>::iterator
+RepeatedPtrField<Element>::erase(typename RepeatedPtrField<Element>::const_iterator first,
+    typename RepeatedPtrField<Element>::const_iterator last) {
+  int n = last - first;
+  const_iterator it = first;
+  for (int i = 0; i < n; ++i) {
+    it = erase(it);
+  }
+  return begin() + (it - begin());
+}
+template <typename Element>
+inline int RepeatedPtrField<Element>::erase(const Element& value) {
+  std::pair<iterator, iterator> pr = equal_range(value);
+  int n = pr.second - pr.first;
+  erase(pr.first, pr.second);
+  return n;
 }
 
 template <typename Element>

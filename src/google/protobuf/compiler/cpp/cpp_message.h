@@ -142,6 +142,8 @@ class MessageGenerator {
   void GenerateCopyFrom(io::Printer* printer);
   void GenerateSwap(io::Printer* printer);
   void GenerateIsInitialized(io::Printer* printer);
+  void GenerateCompare(io::Printer* printer);
+  void GenerateSortFields(io::Printer* printer);
 
   // Helpers for GenerateSerializeWithCachedSizes().
   void GenerateSerializeOneField(io::Printer* printer,
@@ -154,6 +156,7 @@ class MessageGenerator {
 
   const Descriptor* descriptor_;
   string classname_;
+  const FieldDescriptor* keyfield_;
   Options options_;
   FieldGeneratorMap field_generators_;
   scoped_array<scoped_ptr<MessageGenerator> > nested_generators_;

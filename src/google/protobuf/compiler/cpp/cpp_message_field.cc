@@ -136,6 +136,27 @@ GenerateSwappingCode(io::Printer* printer) const {
 }
 
 void MessageFieldGenerator::
+GenerateCompareCode(io::Printer* printer) const {
+  printer->Print(variables_,
+    "if (int d = $name$_->Compare(*other.$name$_))\n"
+    "  return d;\n");
+}
+
+void MessageFieldGenerator::
+GenerateKeyCompareCode(io::Printer* printer) const {
+  printer->Print(variables_,
+    "Compare(const $type$& key) const {\n"
+    "  return $name$_->Compare(key);\n"
+    "}\n");
+}
+
+void MessageFieldGenerator::
+GenerateKeyCompareDeclaration(io::Printer* printer) const {
+  printer->Print(variables_,
+    "int Compare(const $type$& key) const;\n");
+}
+
+void MessageFieldGenerator::
 GenerateConstructorCode(io::Printer* printer) const {
   printer->Print(variables_, "$name$_ = NULL;\n");
 }
@@ -242,6 +263,21 @@ GenerateMergingCode(io::Printer* printer) const {
 void RepeatedMessageFieldGenerator::
 GenerateSwappingCode(io::Printer* printer) const {
   printer->Print(variables_, "$name$_.Swap(&other->$name$_);\n");
+}
+
+void RepeatedMessageFieldGenerator::
+GenerateCompareCode(io::Printer* printer) const {
+  // Not needed for repeated fields.
+}
+
+void RepeatedMessageFieldGenerator::
+GenerateKeyCompareCode(io::Printer* printer) const {
+  // Not needed for repeated fields.
+}
+
+void RepeatedMessageFieldGenerator::
+GenerateKeyCompareDeclaration(io::Printer* printer) const {
+  // Not needed for repeated fields.
 }
 
 void RepeatedMessageFieldGenerator::

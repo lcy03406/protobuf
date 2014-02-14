@@ -81,6 +81,23 @@ void Message::CopyFrom(const Message& from) {
   ReflectionOps::Copy(from, this);
 }
 
+int Message::Compare(const Message& other) const {
+  const Descriptor* descriptor = GetDescriptor();
+  GOOGLE_CHECK_EQ(other.GetDescriptor(), descriptor)
+    << ": Tried to compare a message with a different type.  "
+       "a: " << descriptor->full_name() << ", "
+       "b:" << other.GetDescriptor()->full_name();
+  return ReflectionOps::Compare(*this, other);
+}
+
+int Message::CheckTypeAndCompare(const MessageLite& other) const {
+  return Compare(*down_cast<const Message*>(&other));
+}
+
+void Message::SortFields() {
+  ReflectionOps::SortFields(this);
+}
+
 string Message::GetTypeName() const {
   return GetDescriptor()->full_name();
 }

@@ -288,7 +288,10 @@ bool CodeGeneratorRequest::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(122)) goto parse_proto_file;
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -296,6 +299,7 @@ bool CodeGeneratorRequest::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         DO_(::google::protobuf::internal::WireFormat::SkipField(
@@ -304,6 +308,7 @@ bool CodeGeneratorRequest::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -455,6 +460,26 @@ bool CodeGeneratorRequest::IsInitialized() const {
     if (!this->proto_file(i).IsInitialized()) return false;
   }
   return true;
+}
+
+int CodeGeneratorRequest::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const CodeGeneratorRequest* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const CodeGeneratorRequest*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int CodeGeneratorRequest::Compare(const CodeGeneratorRequest& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void CodeGeneratorRequest::SortFields() {
 }
 
 void CodeGeneratorRequest::Swap(CodeGeneratorRequest* other) {
@@ -620,7 +645,10 @@ bool CodeGeneratorResponse_File::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -628,6 +656,7 @@ bool CodeGeneratorResponse_File::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         DO_(::google::protobuf::internal::WireFormat::SkipField(
@@ -636,6 +665,7 @@ bool CodeGeneratorResponse_File::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -796,6 +826,26 @@ bool CodeGeneratorResponse_File::IsInitialized() const {
   return true;
 }
 
+int CodeGeneratorResponse_File::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const CodeGeneratorResponse_File* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const CodeGeneratorResponse_File*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int CodeGeneratorResponse_File::Compare(const CodeGeneratorResponse_File& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void CodeGeneratorResponse_File::SortFields() {
+}
+
 void CodeGeneratorResponse_File::Swap(CodeGeneratorResponse_File* other) {
   if (other != this) {
     std::swap(name_, other->name_);
@@ -922,7 +972,10 @@ bool CodeGeneratorResponse::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(122)) goto parse_file;
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) {
+          SortFields();
+          return true;
+        }
         break;
       }
 
@@ -930,6 +983,7 @@ bool CodeGeneratorResponse::MergePartialFromCodedStream(
       handle_uninterpreted:
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          SortFields();
           return true;
         }
         DO_(::google::protobuf::internal::WireFormat::SkipField(
@@ -938,6 +992,7 @@ bool CodeGeneratorResponse::MergePartialFromCodedStream(
       }
     }
   }
+  SortFields();
   return true;
 #undef DO_
 }
@@ -1060,6 +1115,26 @@ void CodeGeneratorResponse::CopyFrom(const CodeGeneratorResponse& from) {
 bool CodeGeneratorResponse::IsInitialized() const {
 
   return true;
+}
+
+int CodeGeneratorResponse::Compare(const ::google::protobuf::Message& other) const {
+  if (&other == this) return 0;
+  const CodeGeneratorResponse* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const CodeGeneratorResponse*>(
+      &other);
+  if (source == NULL) {
+    return ::google::protobuf::internal::ReflectionOps::Compare(*this, other);
+  } else {
+    return Compare(*source);
+  }
+}
+
+int CodeGeneratorResponse::Compare(const CodeGeneratorResponse& other) const {
+  if(&other == this) return 0;
+  return 0;
+}
+
+void CodeGeneratorResponse::SortFields() {
 }
 
 void CodeGeneratorResponse::Swap(CodeGeneratorResponse* other) {

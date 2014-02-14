@@ -2018,6 +2018,14 @@ bool FieldDescriptor::is_packed() const {
   return is_packable() && (options_ != NULL) && options_->packed();
 }
 
+bool FieldDescriptor::is_comparable() const {
+  return !is_repeated() && (options_ != NULL) && options_->comparable();
+}
+
+bool FieldDescriptor::is_ordered() const {
+  return is_repeated() && (options_ != NULL) && options_->ordered();
+}
+
 bool Descriptor::GetSourceLocation(SourceLocation* out_location) const {
   vector<int> path;
   GetLocationPath(&path);
@@ -4092,6 +4100,39 @@ void DescriptorBuilder::ValidateFieldOptions(FieldDescriptor* field,
       field->full_name(), proto,
       DescriptorPool::ErrorCollector::TYPE,
       "[packed = true] can only be specified for repeated primitive fields.");
+  }
+
+  if (field->options().has_enum_type()) {
+    switch(field->cpp_type()) {
+      case FieldDescriptor::CPPTYPE_INT32:
+      case FieldDescriptor::CPPTYPE_UINT32:
+      case FieldDescriptor::CPPTYPE_INT64:
+      case FieldDescriptor::CPPTYPE_UINT64:
+        break;
+      default:
+        AddError(
+          field->full_name(), proto,
+          DescriptorPool::ErrorCollector::TYPE,
+          "[enum_type] can only be specified for integer fields.");
+    }
+    Symbol type =
+      LookupSymbolNoPlaceholder(field->options().enum_type(), field->full_name(),
+                   LOOKUP_TYPES);
+    if (type.IsNull()) {
+      AddNotDefinedError(field->full_name(), proto,
+                         DescriptorPool::ErrorCollector::TYPE,
+                         field->options().enum_type());
+    }
+    else if (type.type != Symbol::ENUM) {
+      AddError(field->full_name(), proto,
+                DescriptorPool::ErrorCollector::TYPE,
+                "\"" + field->options().enum_type() + "\" is not an enum type.");
+      return;
+    }
+    else
+    {
+      field->enum_type_ = type.enum_descriptor;
+    }
   }
 
   // Note:  Default instance may not yet be initialized here, so we have to

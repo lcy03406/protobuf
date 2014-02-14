@@ -106,6 +106,10 @@ class FieldGenerator {
   // message.cc under the GenerateSwap method.
   virtual void GenerateSwappingCode(io::Printer* printer) const = 0;
 
+  virtual void GenerateCompareCode(io::Printer* printer) const = 0;
+  virtual void GenerateKeyCompareCode(io::Printer* printer) const = 0;
+  virtual void GenerateKeyCompareDeclaration(io::Printer* printer) const = 0;
+
   // Generate initialization code for private members declared by
   // GeneratePrivateMembers(). These go into the message class's SharedCtor()
   // method, invoked by each of the generated constructors.

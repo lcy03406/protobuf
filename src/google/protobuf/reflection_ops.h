@@ -69,6 +69,8 @@ class LIBPROTOBUF_EXPORT ReflectionOps {
                                        const string& prefix,
                                        vector<string>* errors);
 
+  static void SortFields(Message* message);
+  static int Compare(const Message& a, const Message& b);
  private:
   // All methods are static.  No need to construct.
   GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ReflectionOps);

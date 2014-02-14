@@ -221,6 +221,7 @@ class TextFormat::Parser::ParserImpl {
     // Consume fields until we cannot do so anymore.
     while(true) {
       if (LookingAtType(io::Tokenizer::TYPE_END)) {
+        output->SortFields();
         return !had_errors_;
       }
 
@@ -301,6 +302,7 @@ class TextFormat::Parser::ParserImpl {
     // Confirm that we have a valid ending delimeter.
     DO(Consume(delimeter));
 
+    message->SortFields();
     return true;
   }
 
@@ -537,113 +539,151 @@ class TextFormat::Parser::ParserImpl {
           reflection->Set##CPPTYPE(message, field, VALUE);         \
         }                                                          \
 
-    switch(field->cpp_type()) {
-      case FieldDescriptor::CPPTYPE_INT32: {
-        int64 value;
-        DO(ConsumeSignedInteger(&value, kint32max));
-        SET_FIELD(Int32, static_cast<int32>(value));
-        break;
+    if (field->options().has_enum_type() && field->enum_type() != NULL) {
+      string value;
+      const EnumDescriptor* enum_type = field->enum_type();
+      const EnumValueDescriptor* enum_value = NULL;
+
+      if (LookingAtType(io::Tokenizer::TYPE_IDENTIFIER)) {
+        DO(ConsumeIdentifier(&value));
+        // Find the enumeration value.
+        enum_value = enum_type->FindValueByName(value);
+      } else {
+        ReportError("Expected identifier.");
+        return false;
       }
 
-      case FieldDescriptor::CPPTYPE_UINT32: {
-        uint64 value;
-        DO(ConsumeUnsignedInteger(&value, kuint32max));
-        SET_FIELD(UInt32, static_cast<uint32>(value));
-        break;
+      if (enum_value == NULL) {
+        ReportError("Unknown enumeration value of \"" + value  + "\" for "
+                    "field \"" + field->name() + "\".");
+        return false;
       }
 
-      case FieldDescriptor::CPPTYPE_INT64: {
-        int64 value;
-        DO(ConsumeSignedInteger(&value, kint64max));
-        SET_FIELD(Int64, value);
-        break;
+      switch (field->cpp_type()) {
+        case FieldDescriptor::CPPTYPE_INT32:
+          SET_FIELD(Int32, enum_value->number());
+          break;
+        case FieldDescriptor::CPPTYPE_UINT32:
+          SET_FIELD(Int32, enum_value->number());
+          break;
+        case FieldDescriptor::CPPTYPE_INT64:
+          SET_FIELD(Int32, enum_value->number());
+          break;
+        case FieldDescriptor::CPPTYPE_UINT64:
+          SET_FIELD(Int32, enum_value->number());
+          break;
+        default:
+          ReportError("Invalid option [enum_type] for field \"" + field->name() + ".");
       }
+    } else {
+      switch(field->cpp_type()) {
+        case FieldDescriptor::CPPTYPE_INT32: {
+          int64 value;
+          DO(ConsumeSignedInteger(&value, kint32max));
+          SET_FIELD(Int32, static_cast<int32>(value));
+          break;
+        }
 
-      case FieldDescriptor::CPPTYPE_UINT64: {
-        uint64 value;
-        DO(ConsumeUnsignedInteger(&value, kuint64max));
-        SET_FIELD(UInt64, value);
-        break;
-      }
-
-      case FieldDescriptor::CPPTYPE_FLOAT: {
-        double value;
-        DO(ConsumeDouble(&value));
-        SET_FIELD(Float, static_cast<float>(value));
-        break;
-      }
-
-      case FieldDescriptor::CPPTYPE_DOUBLE: {
-        double value;
-        DO(ConsumeDouble(&value));
-        SET_FIELD(Double, value);
-        break;
-      }
-
-      case FieldDescriptor::CPPTYPE_STRING: {
-        string value;
-        DO(ConsumeString(&value));
-        SET_FIELD(String, value);
-        break;
-      }
-
-      case FieldDescriptor::CPPTYPE_BOOL: {
-        if (LookingAtType(io::Tokenizer::TYPE_INTEGER)) {
+        case FieldDescriptor::CPPTYPE_UINT32: {
           uint64 value;
-          DO(ConsumeUnsignedInteger(&value, 1));
-          SET_FIELD(Bool, value);
-        } else {
+          DO(ConsumeUnsignedInteger(&value, kuint32max));
+          SET_FIELD(UInt32, static_cast<uint32>(value));
+          break;
+        }
+
+        case FieldDescriptor::CPPTYPE_INT64: {
+          int64 value;
+          DO(ConsumeSignedInteger(&value, kint64max));
+          SET_FIELD(Int64, value);
+          break;
+        }
+
+        case FieldDescriptor::CPPTYPE_UINT64: {
+          uint64 value;
+          DO(ConsumeUnsignedInteger(&value, kuint64max));
+          SET_FIELD(UInt64, value);
+          break;
+        }
+
+        case FieldDescriptor::CPPTYPE_FLOAT: {
+          double value;
+          DO(ConsumeDouble(&value));
+          SET_FIELD(Float, static_cast<float>(value));
+          break;
+        }
+
+        case FieldDescriptor::CPPTYPE_DOUBLE: {
+          double value;
+          DO(ConsumeDouble(&value));
+          SET_FIELD(Double, value);
+          break;
+        }
+
+        case FieldDescriptor::CPPTYPE_STRING: {
           string value;
-          DO(ConsumeIdentifier(&value));
-          if (value == "true" || value == "t") {
-            SET_FIELD(Bool, true);
-          } else if (value == "false" || value == "f") {
-            SET_FIELD(Bool, false);
+          DO(ConsumeString(&value));
+          SET_FIELD(String, value);
+          break;
+        }
+
+        case FieldDescriptor::CPPTYPE_BOOL: {
+          if (LookingAtType(io::Tokenizer::TYPE_INTEGER)) {
+            uint64 value;
+            DO(ConsumeUnsignedInteger(&value, 1));
+            SET_FIELD(Bool, value);
           } else {
-            ReportError("Invalid value for boolean field \"" + field->name()
-                        + "\". Value: \"" + value  + "\".");
+            string value;
+            DO(ConsumeIdentifier(&value));
+            if (value == "true" || value == "t") {
+              SET_FIELD(Bool, true);
+            } else if (value == "false" || value == "f") {
+              SET_FIELD(Bool, false);
+            } else {
+              ReportError("Invalid value for boolean field \"" + field->name()
+                          + "\". Value: \"" + value  + "\".");
+              return false;
+            }
+          }
+          break;
+        }
+
+        case FieldDescriptor::CPPTYPE_ENUM: {
+          string value;
+          const EnumDescriptor* enum_type = field->enum_type();
+          const EnumValueDescriptor* enum_value = NULL;
+
+          if (LookingAtType(io::Tokenizer::TYPE_IDENTIFIER)) {
+            DO(ConsumeIdentifier(&value));
+            // Find the enumeration value.
+            enum_value = enum_type->FindValueByName(value);
+
+          } else if (LookingAt("-") ||
+                     LookingAtType(io::Tokenizer::TYPE_INTEGER)) {
+            int64 int_value;
+            DO(ConsumeSignedInteger(&int_value, kint32max));
+            value = SimpleItoa(int_value);        // for error reporting
+            enum_value = enum_type->FindValueByNumber(int_value);
+          } else {
+            ReportError("Expected integer or identifier.");
             return false;
           }
-        }
-        break;
-      }
 
-      case FieldDescriptor::CPPTYPE_ENUM: {
-        string value;
-        const EnumDescriptor* enum_type = field->enum_type();
-        const EnumValueDescriptor* enum_value = NULL;
+          if (enum_value == NULL) {
+            ReportError("Unknown enumeration value of \"" + value  + "\" for "
+                        "field \"" + field->name() + "\".");
+            return false;
+          }
 
-        if (LookingAtType(io::Tokenizer::TYPE_IDENTIFIER)) {
-          DO(ConsumeIdentifier(&value));
-          // Find the enumeration value.
-          enum_value = enum_type->FindValueByName(value);
-
-        } else if (LookingAt("-") ||
-                   LookingAtType(io::Tokenizer::TYPE_INTEGER)) {
-          int64 int_value;
-          DO(ConsumeSignedInteger(&int_value, kint32max));
-          value = SimpleItoa(int_value);        // for error reporting
-          enum_value = enum_type->FindValueByNumber(int_value);
-        } else {
-          ReportError("Expected integer or identifier.");
-          return false;
+          SET_FIELD(Enum, enum_value);
+          break;
         }
 
-        if (enum_value == NULL) {
-          ReportError("Unknown enumeration value of \"" + value  + "\" for "
-                      "field \"" + field->name() + "\".");
-          return false;
+        case FieldDescriptor::CPPTYPE_MESSAGE: {
+          // We should never get here. Put here instead of a default
+          // so that if new types are added, we get a nice compiler warning.
+          GOOGLE_LOG(FATAL) << "Reached an unintended state: CPPTYPE_MESSAGE";
+          break;
         }
-
-        SET_FIELD(Enum, enum_value);
-        break;
-      }
-
-      case FieldDescriptor::CPPTYPE_MESSAGE: {
-        // We should never get here. Put here instead of a default
-        // so that if new types are added, we get a nice compiler warning.
-        GOOGLE_LOG(FATAL) << "Reached an unintended state: CPPTYPE_MESSAGE";
-        break;
       }
     }
 #undef SET_FIELD

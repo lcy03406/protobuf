@@ -189,6 +189,10 @@ class LIBPROTOBUF_EXPORT Message : public MessageLite {
   // must be of the same type as this message (i.e. the exact same class).
   virtual void MergeFrom(const Message& from);
 
+  virtual int Compare(const Message& other) const;
+
+  virtual void SortFields();
+
   // Verifies that IsInitialized() returns true.  GOOGLE_CHECK-fails otherwise, with
   // a nice error message.
   void CheckInitialized() const;
@@ -269,6 +273,7 @@ class LIBPROTOBUF_EXPORT Message : public MessageLite {
   virtual void Clear();
   virtual bool IsInitialized() const;
   virtual void CheckTypeAndMergeFrom(const MessageLite& other);
+  virtual int CheckTypeAndCompare(const MessageLite& other) const;
   virtual bool MergePartialFromCodedStream(io::CodedInputStream* input);
   virtual int ByteSize() const;
   virtual void SerializeWithCachedSizes(io::CodedOutputStream* output) const;

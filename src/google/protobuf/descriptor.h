@@ -431,6 +431,8 @@ class LIBPROTOBUF_EXPORT FieldDescriptor {
                                  //               IsTypePackable(type())
   bool is_packed() const;        // shorthand for is_packable() &&
                                  //               options().packed()
+  bool is_comparable() const;
+  bool is_ordered() const;
 
   // Index of this field within the message's field array, or the file or
   // extension scope's extensions array.

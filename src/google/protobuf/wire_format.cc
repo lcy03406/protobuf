@@ -732,6 +732,10 @@ void WireFormat::SerializeFieldWithCachedSizes(
     const FieldDescriptor* field,
     const Message& message,
     io::CodedOutputStream* output) {
+  if (field->options().omit()) {
+    return;
+  }
+
   const Reflection* message_reflection = message.GetReflection();
 
   if (field->is_extension() &&
@@ -898,6 +902,11 @@ int WireFormat::ByteSize(const Message& message) {
 int WireFormat::FieldByteSize(
     const FieldDescriptor* field,
     const Message& message) {
+  if (field->options().omit()) {
+    return 0;
+  }
+  //const_cast<FieldOptions*>(&field->options())->mutable_uninterpreted_option()->sort();
+
   const Reflection* message_reflection = message.GetReflection();
 
   if (field->is_extension() &&
